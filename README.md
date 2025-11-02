@@ -9,17 +9,15 @@ This README describes a hands-on, end-to-end setup used to deploy a Python web a
 ---
 
 ## Table of Contents
-1. [Overview & Architecture](#overview--architecture)  
-2. [Important Note — SSH access](#important-note---ssh-access)  
-3. [Commands for Master & Worker Nodes (common)](#commands-for-master--worker-nodes-common)  
-4. [Master node — initialize control plane](#master-node---initialize-control-plane)  
-5. [Worker node — join the cluster](#worker-node---join-the-cluster)  
-6. [Complete Master node — MetalLB, Ingress, Cert-Manager, App Deploy](#complete-master-node---metallb-ingress-cert-manager-app-deploy)  
-7. [Jump Server — kubeconfig, kubectl, persistent port-forwarding](#jump-server---kubeconfig-kubectl-persistent-port-forwarding)  
-8. [Verify & Useful Commands](#verify--useful-commands)  
-9. [Files in this repository (reference)](#files-in-this-repository-reference)  
-10. [Screenshots (placeholders)](#screenshots-placeholders)  
-11. [Next steps & Notes](#next-steps--notes)
+1. [Overview & Architecture] 
+2. [Important Note — SSH access]  
+3. [Commands for Master & Worker Nodes (common)]  
+4. [Master node — initialize control plane] 
+5. [Worker node — join the cluster]
+6. [Complete Master node — MetalLB, Ingress, Cert-Manager, App Deploy]
+7. [Jump Server — kubeconfig, kubectl, persistent port-forwarding] 
+8. [Screenshots (placeholders)]  
+
 
 ---
 
@@ -300,8 +298,18 @@ sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 sudo ufw reload
 ```
-
 If cert-manager successfully issued the certificate and Ingress is configured properly, https://DNS_HostName should now serve your application with a valid TLS certificate.
+
+## Screenshots:
+### Application Accessible via DNS Hostname
+<p align="center">
+<img width="800" height="400" alt="image" src="https://github.com/user-attachments/assets/e756f246-445d-493e-93fd-e028ac6601e4" />
+</p>
+
+### Verified HTTPS Connection
+<p align="center">
+<img width="800" height="400" alt="image" src="https://github.com/user-attachments/assets/8292b8f0-b444-4e3f-986f-84ff7d83d287" />
+</p>
 
 
 
