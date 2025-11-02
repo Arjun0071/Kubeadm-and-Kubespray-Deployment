@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: <ingress_name>                # e.g., fastapi-ingress
+  namespace: <namespace>              # e.g., default
+  annotations:
+    cert-manager.io/cluster-issuer: <cluster_issuer_name>      # e.g., letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "<ssl_redirect>" # e.g., "false"
+spec:
+  ingressClassName: <ingress_class>   # e.g., nginx
+  tls:
+    - hosts:
+        - <domain_name>               # e.g., myapi.servebeer.com
+      secretName: <tls_secret_name>   # e.g., myapi-tls
+  rules:
+    - host: <domain_name>             # same as above
+      http:
+        paths:
+          - path: <path>              # e.g., /
+            pathType: <path_type>     # e.g., Prefix
+            backend:
+              service:
+                name: <service_name>  # e.g., fastapi-release-demoapp-chart
+                port:
+                  number: <service_port> # e.g., 8000
