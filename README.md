@@ -41,6 +41,7 @@ DNS → `myapi.servebeer.com`
 ## Important Note — SSH access
 Before you start, **enable passwordless SSH from the Jump Server to both private VMs**
 
+
 ## ⚙️ Commands for Master & Worker Nodes (Common)
 
 Run the following commands on **both Master and Worker nodes** (❌ not on the Jump Server unless explicitly mentioned).
@@ -56,17 +57,7 @@ sudo apt update && sudo apt upgrade -y
 ### 2. 🐋 Install & Configure containerd
 
 ```
-sudo apt install -y containerd
-sudo mkdir -p /etc/containerd
-```
-#### Generate default config
-```
-sudo containerd config default | sudo tee /etc/containerd/config.toml
-```
-#### Restart & enable
-```
-sudo systemctl restart containerd
-sudo systemctl enable containerd
+https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd/
 ```
 #### Check status
 ```
@@ -90,16 +81,7 @@ sudo systemctl restart containerd
 ```
 ### 3. Install kubeadm, kubelet, kubectl
 ```
-sudo apt install -y apt-transport-https ca-certificates curl gnupg
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.34/deb/ /' | \
-  sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-sudo apt update
-sudo apt install -y kubelet kubeadm kubectl
-sudo apt-mark hold kubelet kubeadm kubectl
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 ```
 ### 4. Disable swap and enable kernel settings
 ```
@@ -131,22 +113,22 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
-### 3. Optional: install net-tools & verify API server listening
+### 3. Verify API server listening
 ```
-sudo apt install -y net-tools
 sudo netstat -tulnp | grep 6443   # Kubernetes API server should be listening on 6443
 ```
 
 ### 4. Apply Flannel CNI (example)
 ```
-kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+https://github.com/flannel-io/flannel
 ```
 
 ### 5. Verify Master node state
 ```
 kubectl get nodes
-# Note: Master may show NotReady until CNI is up
 ```
+# Note: Master may show NotReady until CNI is up
+
 
 ## Worker node — join the cluster
 Run on each Worker node using the join command produced by kubeadm init
@@ -167,14 +149,11 @@ kubectl get nodes
 After Worker nodes have joined, finish the control-plane configuration and deploy network services & the app.
 ### 1. Install Helm (if not already installed)
 ```
-curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+https://helm.sh/docs/intro/install/
 ```
 ### 2. Install MetalLB (Helm)
 ```
-helm repo add metallb https://metallb.github.io/metallb
-helm repo update
-helm install metallb metallb/metallb -n metallb-system --create-namespace
-kubectl get pods -n metallb-system
+https://metallb.universe.tf/installation/
 ```
 Apply MetalLB address pool configuration (file exists in repo and make changes to it accordingly)
 This repo contains metallb-config.yaml — apply that file:
@@ -185,7 +164,9 @@ The metallb-config.yaml in this repo defines the IPAddressPool and L2Advertiseme
 
 ### 3. Deploy NGINX Ingress Controller
 ```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+ https://platform9.com/learn/v1.0/tutorials/nginix-controller-via-yaml
+```
+```
 kubectl get pods -n ingress-nginx
 kubectl get svc -n ingress-nginx
 ```
@@ -193,7 +174,9 @@ The ingress-nginx-controller service should get an EXTERNAL-IP assigned by Metal
 
 ### 4. Install Cert-Manager
 ```
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
+https://cert-manager.io/docs/installation/
+```
+```
 kubectl get pods -n cert-manager
 ```
 Apply ClusterIssuer (file exists in repo make changes to it accordingly)
@@ -245,9 +228,10 @@ ls -l /root/.kube/config
 ```
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-kubectl version --client
+```
+Installation (from official Kubernetes docs):
+```
+https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 ```
 
 Verify connectivity:
