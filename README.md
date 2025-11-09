@@ -54,11 +54,7 @@ Run the following commands on **both Master and Worker nodes** (❌ not on the J
 sudo apt update && sudo apt upgrade -y
 ```
 
-### 2. 🐋 Install & Configure containerd
-
-```
-https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd/
-```
+### 2. 🐋 **Containerd:** [Install & Configure containerd](https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd/)
 #### Check status
 ```
 sudo systemctl status containerd
@@ -79,10 +75,7 @@ SystemdCgroup = true
 
 sudo systemctl restart containerd
 ```
-### 3. Install kubeadm, kubelet, kubectl
-```
-https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
-```
+### 3. **Kubeadm, Kubelet, Kubectl:** [Install kubeadm, kubelet, kubectl](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 ### 4. Disable swap and enable kernel settings
 ```
 sudo swapoff -a
@@ -118,10 +111,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 sudo netstat -tulnp | grep 6443   # Kubernetes API server should be listening on 6443
 ```
 
-### 4. Apply Flannel CNI (example)
-```
-https://github.com/flannel-io/flannel
-```
+### 4. **Flannel CNI:** [Flannel GitHub Repository](https://github.com/flannel-io/flannel)
 
 ### 5. Verify Master node state
 ```
@@ -147,14 +137,8 @@ kubectl get nodes
 
 ## Complete Master node — install MetalLB, Ingress, Cert-Manager, and deploy app
 After Worker nodes have joined, finish the control-plane configuration and deploy network services & the app.
-### 1. Install Helm (if not already installed)
-```
-https://helm.sh/docs/intro/install/
-```
-### 2. Install MetalLB (Helm)
-```
-https://metallb.universe.tf/installation/
-```
+### 1.  **Helm:** [Install Helm](https://helm.sh/docs/intro/install/)
+### 2. **MetalLB:** [Install MetalLB](https://metallb.universe.tf/installation/)
 Apply MetalLB address pool configuration (file exists in repo and make changes to it accordingly)
 This repo contains metallb-config.yaml — apply that file:
 
@@ -162,20 +146,14 @@ kubectl apply -f metallb-config.yaml
 
 The metallb-config.yaml in this repo defines the IPAddressPool and L2Advertisement used by MetalLB. Edit it if you need a different range for your environment.
 
-### 3. Deploy NGINX Ingress Controller
-```
- https://platform9.com/learn/v1.0/tutorials/nginix-controller-via-yaml
-```
+### 3.**NGINX Ingress Controller:** [Deploy Ingress NGINX](https://platform9.com/learn/v1.0/tutorials/nginix-controller-via-yaml)
 ```
 kubectl get pods -n ingress-nginx
 kubectl get svc -n ingress-nginx
 ```
 The ingress-nginx-controller service should get an EXTERNAL-IP assigned by MetalLB.
 
-### 4. Install Cert-Manager
-```
-https://cert-manager.io/docs/installation/
-```
+### 4. **Cert-Manager:** [Install Cert-Manager](https://cert-manager.io/docs/installation/)
 ```
 kubectl get pods -n cert-manager
 ```
@@ -224,15 +202,8 @@ sudo chown root:root /root/.kube/config
 sudo chmod 600 /root/.kube/config
 ls -l /root/.kube/config
 ```
-### 2. Install kubectl on Jump Server
-```
-sudo apt-get update
-sudo apt-get install -y ca-certificates curl
-```
-Installation (from official Kubernetes docs):
-```
-https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
-```
+### 2. **Kubectl:** [Install kubectl on Jump Server](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
+
 
 Verify connectivity:
 ```
