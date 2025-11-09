@@ -25,6 +25,9 @@ This README describes a hands-on, end-to-end setup used to deploy a Python web a
 
 The following diagram explains how external traffic flows securely from the public internet to the private Kubernetes cluster through the Jump Server and Ingress Controller:
 
+![kubeadm-architecture](https://github.com/user-attachments/assets/c65987ea-3479-4ad1-bb70-1e45b8710eea)
+
+
 Internet  
 ↓  
 DNS → `myapi.servebeer.com`  
