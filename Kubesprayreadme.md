@@ -13,8 +13,12 @@ This guide provides a step-by-step tutorial to deploy a Kubernetes cluster using
 5. [Jump Server — kubeconfig, kubectl, persistent port-forwarding] 
 6. [Screenshots (placeholders)]  
 
-
 ## Architecture Overview
+The following diagram explains how external traffic flows securely from the public internet to the private Kubernetes cluster through the Jump Server and Ingress Controller:
+
+![kubespray-architecture](https://github.com/user-attachments/assets/0c8455fb-85c0-4492-99d1-1a87fb0810ff)
+
+
 ```
         Internet
             |
