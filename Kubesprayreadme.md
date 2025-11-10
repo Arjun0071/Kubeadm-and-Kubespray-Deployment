@@ -5,7 +5,7 @@ This guide provides a step-by-step tutorial to deploy a Kubernetes cluster using
 ---
 ## Table of Contents
 
-. [Overview & Architecture] 
+[Overview & Architecture] 
 1. [Important Note — SSH access]  
 2. [Commands for Master & Worker Nodes (Pre-requisites)]  
 3. [Jump Server Setup] 
@@ -88,8 +88,10 @@ sudo apt install -y git python3-pip sshpass curl python3-venv
 ```
 
 **2. Set up Python virtual environment**
-[Creating and Activating a Python Virtual Environment](https://docs.python.org/3/library/venv.html)
-[Ansible Installation via pip](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#pip-install)
+
+1.[Creating and Activating a Python Virtual Environment](https://docs.python.org/3/library/venv.html)
+
+2. [Ansible Installation via pip](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#pip-install)
 
 Make local binaries accessible and Verify  Installation
 ```
@@ -97,9 +99,11 @@ ansible --version
 ```
 
 **3. Clone Kubespray & install requirements**
+
 Clone the Kubespray Repository:
 ```
 git clone https://github.com/kubernetes-sigs/kubespray.git
+```
 ```
 cd kubespray
 sudo pip3 install -r requirements.txt
