@@ -68,14 +68,14 @@ sudo sysctl --system
 ```
 
 **4. Ensure time synchronization**
+Ubuntu 20.04/22.04 use systemd-timesyncd by default; optionally install ntp
 ```
 sudo timedatectl status
-sudo apt install -y chrony
-sudo systemctl enable --now chrony
-sudo chronyc sources
 ```
+if not synced:
+[Install Chrony](https://infotechys.com/chrony-commands-for-system-administrators/)
 
-**5. Install helpful tools**
+**5. Install helpful tools (optional)**
 ```
 sudo apt install -y jq net-tools curl vim git
 ```
