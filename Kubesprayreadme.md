@@ -289,6 +289,27 @@ If cert-manager successfully issued the certificate and Ingress is configured pr
 ## CI/CD Integration — Automated Build & Deployment via GitHub Actions
 This project integrates a fully automated CI/CD pipeline to streamline Docker image creation, Helm upgrades, and cluster deployment on the private Kubernetes setup built using kubeadm.
 
+**Note:**
+The CI/CD pipeline automates the existing deployment flow by building the Docker image, pushing it to Docker Hub, and deploying updates to the Kubernetes cluster via the jump server using Helm. The underlying infrastructure (jump server, MetalLB, ingress, etc.) remains unchanged, as shown in the main architecture diagram.
+
+### CI/CD Control Flow
+
+```text
+Developer Commit (GitHub)
+        │
+        ▼
+GitHub Actions (CI)
+    ├─ Build Docker Image
+    └─ Push Image to Docker Hub
+        │
+        ▼
+GitHub Actions (CD)
+    ├─ SSH into Jump Server
+    ├─ Connect to Master Node
+    ├─ Helm Upgrade Release
+    └─ Deploy Updated Application to Kubernetes Cluster
+```
+
 ### Overview
 
 Whenever code is pushed to the main branch, the pipeline automatically:
