@@ -1,0 +1,24 @@
+name: SSH Test to Jumpserver
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-ssh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Test SSH Connection
+        env:
+          JUMP_HOST: ${{ secrets.JUMP_HOST }}
+          JUMP_USER: ${{ secrets.JUMP_USER }}
+        run: |
+          ssh -o StrictHostKeyChecking=no ${JUMP_USER}@${JUMP_HOST} "hostname && echo 'Connected successfully 🚀'"

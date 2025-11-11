@@ -1,1 +1,52 @@
+name: CD - Deploy FastAPI via Helm
 
+on:
+  workflow_run:
+    workflows: ["CI- Build and push the Docker Image"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy Updated Image via Jump Server
+        env:
+          JUMP_USER: ${{ secrets.JUMP_USER }}
+          JUMP_HOST: ${{ secrets.JUMP_HOST }}
+          MASTER_USER: ${{ secrets.MASTER_USER }}
+          MASTER_IP: ${{ secrets.MASTER_IP }}
+          IMAGE_TAG: ${{ github.event.workflow_run.head_commit.id }}
+        run: |
+          echo "Deploying Docker image ${IMAGE_TAG} to master node ${MASTER_IP}"
+          
+          ssh -o StrictHostKeyChecking=no ${JUMP_USER}@${JUMP_HOST} "
+            echo 'Connected to jump server. Forwarding to master node...'
+            ssh -o StrictHostKeyChecking=no ${MASTER_USER}@${MASTER_IP} '
+              export KUBECONFIG=~/.kube/config
+              echo Using kubeconfig: ~/.kube/config
+
+              # Verify Helm chart exists
+              if [ ! -d /home/${MASTER_USER}/FastAPI-CI-CD/demoapp-chart ]; then
+                echo \"ERROR: Helm chart directory not found!\"
+                exit 1
+              fi
+
+              # Upgrade existing release with the new image tag
+              helm upgrade --install fastapi-release /home/${MASTER_USER}/FastAPI-CI-CD/demoapp-chart \
+                --reuse-values \
+                --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/fastapi-demo \
+                --set image.tag=${IMAGE_TAG} \
+                --set image.pullPolicy=Always \
+                --namespace default \
+                --atomic
+            '
+          "
